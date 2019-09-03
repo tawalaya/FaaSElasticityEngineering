@@ -5,12 +5,7 @@ function error_exit
 }
 
 # will save mesurementes in results/experiment_name/config_name/run_number/provider.csv
-experiment_name=test_m3
-number_of_repetitions=5
-sleep_between_rounds=30m
-providers=( aws gcf azure ibm )
-configs=( "0,0,1" "0,0,2" "0,0,0.5" "60,60,1" "60,60,2" "60,60,0.5" )
-target_urls=(  ) #TODO!
+. scripts/config.sh
 
 echo "starting benchmarks!"
 for config in "${configs[@]}"

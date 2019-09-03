@@ -4,8 +4,7 @@ function error_exit
    exit 1 # This unfortunately also exits the terminal
 }
 
-#providers=( azure )
-providers=( aws gcf azure ibm )
+. scripts/config.sh
 echo "deploying providers!"
 for provider in "${providers[@]}"
 do
