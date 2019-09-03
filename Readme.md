@@ -1,3 +1,8 @@
+# Prerequisits
+- jupyter
+- pandas
+- ...
+
 # Experiment Setup
 
  1. Setup Serverless Framework 
