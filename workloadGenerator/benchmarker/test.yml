@@ -1,0 +1,24 @@
+config:
+  # is set in logger.js
+  target: 'https://placeholder.com'
+  http:
+    timeout: 300
+  phases:
+    - name: "p0"
+      arrivalRate: 0
+      duration: 60
+    - name: "p1"
+      duration: 60
+      arrivalRate: 0
+      rampTo: 60
+    - name: "p2"
+      duration: 60
+      arrivalRate: 60
+  processor: "./logger.js"
+scenarios:
+  - flow:
+    - get:
+        url: "/"
+        beforeRequest: "onLoadingStarted"
+        afterResponse: "logResult"
+
