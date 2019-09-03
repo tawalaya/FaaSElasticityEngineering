@@ -1,6 +1,7 @@
 # Prerequisits
 - jupyter
 - pandas
+- seaborn
 - ...
 
 # Experiment Setup
