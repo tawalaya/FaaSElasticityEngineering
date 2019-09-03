@@ -23,7 +23,7 @@ do
    target_url=$(sls info | egrep -o 'https?://[^ ]+' | head -1)
    if [ "$provider" = "azure" ]; then
       #TODO: fix this!
-      target_url=https://elasticity-benchmark.azurewebsites.net/api/hello
+      target_url=https://tub-elasticity-benchmark.azurewebsites.net/api/hello
    fi
    result="$result $target_url"
    cd ../..

@@ -8,6 +8,6 @@
     "openwhisk"
   ],
   "devDependencies": {
-    "serverless-openwhisk": ">=0.13.0"
+    "serverless-openwhisk": "^0.18.4"
   }
 }

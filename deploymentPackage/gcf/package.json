@@ -9,7 +9,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "serverless-google-cloudfunctions": "^2.3.2"
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-google-cloudfunctions": "^2.3.3"
   }
 }

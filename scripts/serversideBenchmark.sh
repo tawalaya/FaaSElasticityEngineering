@@ -28,8 +28,9 @@ do
                 
             echo "url of service: $target_url"
             mkdir -p results/$experiment_name/$config/$run
-            cd results/$experiment_name/$config/$run
-            #artillery run ../../../benchmarker/test.yml || error_exit "could not benchmark $provider"
+            cd results/$experiment_name/$config/$run/
+            pwd
+            artillery run ../../../../workloadGenerator/benchmarker/test.yml || error_exit "could not benchmark $provider"
             mv result* "$provider.csv"
             cd ../../../..
         done

@@ -499,3 +499,4 @@ dmypy.json
 .serverless
 
 # End of https://www.gitignore.io/api/node,latex,python,serverless,jupyternotebooks
+scripts/credentials.sh

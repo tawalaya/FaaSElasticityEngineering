@@ -17,6 +17,8 @@ service: ibm # NOTE: update this with your service name
 # $ npm install
 provider:
   name: openwhisk
+  runtime: nodejs:10
+  timeout: 30
   memory: 1024 # optional, default is 256
 
 functions:

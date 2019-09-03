@@ -19,10 +19,10 @@ service: benchmark # NOTE: update this with your service name
 
 provider:
   name: aws
-  runtime: nodejs8.10
-  region: eu-west-1
-  timeout: 60
-  memorySize: 512
+  runtime: nodejs10.x
+  region: eu-west-2
+  timeout: 30
+  memorySize: 1024
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:

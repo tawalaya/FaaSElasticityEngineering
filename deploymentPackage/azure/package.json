@@ -8,7 +8,7 @@
     "serverless"
   ],
   "devDependencies": {
-    "serverless-azure-functions": "*"
+    "serverless-azure-functions": "^0.7.0"
   },
   "dependencies": {
     "threads": "^0.12.0"

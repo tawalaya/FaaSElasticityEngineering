@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: elasticity-benchmark # NOTE: update this with your service name
+service: tub-elasticity-benchmark # NOTE: update this with your service name
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -19,20 +19,10 @@ service: elasticity-benchmark # NOTE: update this with your service name
 
 provider:
   name: azure
-  location: North Europe
+  location: UK South
 
 plugins:
   - serverless-azure-functions
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
-
 functions:
   hello:
     handler: handler.hello
