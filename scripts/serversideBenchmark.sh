@@ -28,7 +28,6 @@ do
         do
             : 
             echo "benchmarking $provider"
-            cd deploymentPackage/$provider
             export target_url=${target_urls[$i]}
             i=$i+1
                 
@@ -37,7 +36,7 @@ do
             cd results/$experiment_name/$config/$run
             #artillery run ../../../benchmarker/test.yml || error_exit "could not benchmark $provider"
             mv result* "$provider.csv"
-            cd ..
+            cd ../../../..
         done
         echo "sleeping for $sleep_between_rounds"
         sleep $sleep_between_rounds

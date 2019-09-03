@@ -1,4 +1,4 @@
-#! /usr/env python
+#! /usr/bin/env python
 
 import sys
 import os
@@ -12,8 +12,7 @@ def main(params):
     target=int(p1+(60*sloap))
 
     template=""
-
-    with open("template.yml") as f:
+    with open(os.path.join(os.path.dirname(__file__),"template.yml")) as f:
         template = reduce(lambda x,a:x+a,f.readlines())
 
     template = template % (p0,p1,target,target)
