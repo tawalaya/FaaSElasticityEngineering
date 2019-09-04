@@ -4,7 +4,7 @@ const prime = require("./prime")
 
 module.exports = () => {
     logger.start()
-    const number = Math.floor((Math.random() * 500000) + 10000000)
-    prime(number)
-    return logger.end()
+    const number = Math.floor((Math.random() * 1000) + 7500000)
+    var result = prime(number)
+    return logger.end(number,result)
 }
