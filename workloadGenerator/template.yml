@@ -12,7 +12,7 @@ config:
       arrivalRate: %d
       rampTo: %d
     - name: "p2"
-      duration: 60
+      duration: 180
       arrivalRate: %d
   processor: "./logger.js"
 scenarios:
