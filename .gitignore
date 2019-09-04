@@ -501,3 +501,4 @@ dmypy.json
 # End of https://www.gitignore.io/api/node,latex,python,serverless,jupyternotebooks
 scripts/credentials.sh
 workloadGenerator/server/.ssh
+workloadGenerator/server/.terraform/
