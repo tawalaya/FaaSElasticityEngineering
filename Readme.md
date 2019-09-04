@@ -1,3 +1,9 @@
+# Prerequisits
+- jupyter
+- pandas
+- seaborn
+- ...
+
 # Experiment Setup
 
  1. Setup Serverless Framework 
@@ -13,7 +19,7 @@
 
  ### Usage
  To edit the function or mesurement points you only need to edit files in `deploymentPackage/logic`.
- Afterwrods, apply your changes by running `deploymentPackage/copylogic.sh`.
+ Afterwards, apply your changes by running `deploymentPackage/copylogic.sh`.
  
  ### Settings
 | Provider | Data-Center  | Location | Memory |
