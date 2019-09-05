@@ -29,9 +29,9 @@ do
             echo "url of service: $target_url"
             mkdir -p results/$experiment_name/$config/$run
             cd results/$experiment_name/$config/$run/
-            pwd
-            artillery run ../../../../workloadGenerator/benchmarker/test.yml || error_exit "could not benchmark $provider"
+            artillery run ../../../../workloadGenerator/benchmarker/test.yml -o "$provider.json" || error_exit "could not benchmark $provider"
             mv result* "$provider.csv"
+            mv timeout* "$provider-timeout.csv"
             cd ../../../..
         done
         echo "sleeping for $sleep_between_rounds"

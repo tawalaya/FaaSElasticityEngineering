@@ -2,7 +2,7 @@ config:
   # is set in logger.js
   target: 'https://placeholder.com'
   http:
-    timeout: 300
+    timeout: 30
   phases:
     - name: "p0"
       arrivalRate: 0
@@ -12,7 +12,7 @@ config:
       arrivalRate: 0
       rampTo: 60
     - name: "p2"
-      duration: 60
+      duration: 180
       arrivalRate: 60
   processor: "./logger.js"
 scenarios:

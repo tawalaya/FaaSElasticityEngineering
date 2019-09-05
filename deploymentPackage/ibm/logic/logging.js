@@ -23,7 +23,7 @@ if (vmId == "win32" || vmId == "win64") {
 const osType = process.platform
 const nodeVersion = process.version
 const containerStartTime = Date.now()
-const containerId = Math.floor(Math.random() * 10000000)
+const containerId = (containerStartTime+Math.floor(Math.random() * 10000000)).toString(32).toUpperCase()
 
 let startTime;
 module.exports.start = () => {
