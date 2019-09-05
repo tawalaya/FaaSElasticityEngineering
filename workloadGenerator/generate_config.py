@@ -9,13 +9,13 @@ def main(params):
     p0      = int(tmp[0])
     p1      = int(tmp[1])
     sloap   = float(tmp[2])
-    target=int(p1+(60*sloap))
+    target=int(p1+(6*sloap))
 
     template=""
     with open(os.path.join(os.path.dirname(__file__),"template.yml")) as f:
         template = reduce(lambda x,a:x+a,f.readlines())
 
-    template = template % (p0,p1,target,target)
+    template = template % (p0,p1,target,target*10)
 
     print(template)
 
