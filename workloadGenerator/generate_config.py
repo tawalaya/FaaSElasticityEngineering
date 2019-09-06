@@ -6,16 +6,18 @@ from functools import reduce
 
 def main(params):
     tmp = params.split(",")
+    processes = int(os.getenv("ARTILLERY_WORKERS",1))
     p0      = int(tmp[0])
     p1      = int(tmp[1])
     sloap   = float(tmp[2])
-    target=int(p1+(6*sloap))
+    rampUp  = int((p1+(60*sloap))/processes)
+    stable  = int(p1+(60*sloap))
 
     template=""
     with open(os.path.join(os.path.dirname(__file__),"template.yml")) as f:
         template = reduce(lambda x,a:x+a,f.readlines())
 
-    template = template % (p0,p1,target,target*10)
+    template = template % (p0,p1,rampUp,stable)
 
     print(template)
 
