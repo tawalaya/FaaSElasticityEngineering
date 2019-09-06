@@ -185,7 +185,7 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
     #remove faulty entries
     result = result[result['requestId'].apply(lambda x:len(str(x))) == 9]
     #remove unnasseary columns
-    columns_to_keep = ['requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId']
+    columns_to_keep = ['requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency']
     columns_filter = []
     for column in result.columns:
         if column in columns_to_keep:
