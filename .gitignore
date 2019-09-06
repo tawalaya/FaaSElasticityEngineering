@@ -502,3 +502,4 @@ dmypy.json
 scripts/credentials.sh
 workloadGenerator/server/.ssh
 workloadGenerator/server/.terraform/
+*.tmp
