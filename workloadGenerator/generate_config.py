@@ -10,7 +10,7 @@ def main(params):
     p0      = int(tmp[0])
     p1      = int(tmp[1])
     sloap   = float(tmp[2])
-    rampUp  = int((p1+(60*sloap))/processes)
+    rampUp  = int((p1+(60*sloap)))
     stable  = int(p1+(60*sloap))
 
     template=""
