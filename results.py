@@ -1,12 +1,7 @@
 #! /usr/bin/env python3
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib
-import seaborn as sns
 import numpy as np
 import glob
-sns.set()
-
 
 #constants
 experiment_phase = {'p0':60000, 'p1':60000, 'p2':180000}
@@ -113,8 +108,10 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
 
                         
                         if 'executionLatency' in df.columns:
-                            df['executionLatency'] = df['executionLatency'] / 1000  
-                            df['cost'] = costs[provider]['EVar']*df['executionLatency']+costs[provider]['EFix']
+                            df["billingWindow"] = df['executionLatency']//100 #executionLatency in ms
+                            df['executionLatency'] = df['executionLatency'] / 1000  #executionLatency in s
+                            
+                            df['cost'] = costs[provider]['EVar']*df["billingWindow"]+costs[provider]['EFix']
                             df['nonExecutionLatency'] = df['requestResponseLatency'] - df['executionLatency']
                         
                         if 'containerId' in df.columns:
