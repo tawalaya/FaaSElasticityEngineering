@@ -13,11 +13,10 @@ function hashString(str){
 //detect vm id based on either boot time or mac-address+hostname (should be VM unique in azure)
 var vmId = process.platform;
 if (vmId == "win32" || vmId == "win64") {
-    vmId =  os.networkInterfaces()["Ethernet 2"][0]["mac"]
-        + "|" + os.hostname();
-    vmId = hashString(vmId)
+    
+    vmId = process.env["COMPUTERNAME"]
 } else  {
-    vmId =  Math.round((Date.now()/1000)-(fs.readFileSync("/proc/uptime").toString().split(" ")[0].split(".")[0])).toString(32).toUpperCase();
+    vmId =  Math.floor((Date.now()/1000)-(fs.readFileSync("/proc/uptime").toString().split(" ")[0].split(".")[0])).toString(32).toUpperCase();
 }
 
 const osType = process.platform

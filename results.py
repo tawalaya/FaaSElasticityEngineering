@@ -1,12 +1,7 @@
 #! /usr/bin/env python3
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib
-import seaborn as sns
 import numpy as np
 import glob
-sns.set()
-
 
 #constants
 experiment_phase = {'p0':60000, 'p1':60000, 'p2':180000}
@@ -29,7 +24,12 @@ def cleanBrokenLines(file,fileds=14,threshold=0.5):
     
     return file+".tmp"
         
-
+costs = {
+    "aws":  {"EVar":16.67,"EFix":0.2},
+    "gcf":  {"EVar":16.50,"EFix":0.4},
+    "ibm":{"EVar":17.0,"EFix":0.0},
+    "azure":  {"EVar":16.0,"EFix":0.2}
+}
 def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True):
     knownIds = {}
     def isNewContainer(containerId):
@@ -46,7 +46,7 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
             for run_num in range(1, num_repetitions+1):
                 startTime = None
                 run = None
-                print("reading",config,provider,run_num)
+                #print("reading",config,provider,run_num)
                 for file in glob.glob('results/'+experiment_name+'/'+config+'/'+str(run_num)+'/'+provider+'/result*.csv'):
                     clean_file = None
                     try:
@@ -100,18 +100,24 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
                         else:
                             df['m4'] = float('nan')
                         
-                        if not faults:
-                            df['deliveryLatency']= (df['m2']-df['m1']) / 1000
-                            df['responseLatency']= (df['m4']-df['m3']) / 1000
-                            df['requestResponseLatency'] = df['requestResponseLatency'] / 1000
-                            df['executionLatency'] = df['executionLatency'] / 1000
+                        df['deliveryLatency']= (df['m2']-df['m1']) / 1000
+                        df['responseLatency']= (df['m4']-df['m3']) / 1000
+                        df['requestResponseLatency'] = df['requestResponseLatency'] / 1000
+                        
 
+
+                        
+                        if 'executionLatency' in df.columns:
+                            df["billingWindow"] = df['executionLatency']//100 #executionLatency in ms
+                            df['executionLatency'] = df['executionLatency'] / 1000  #executionLatency in s
+                            
+                            df['cost'] = costs[provider]['EVar']*df["billingWindow"]+costs[provider]['EFix']
                             df['nonExecutionLatency'] = df['requestResponseLatency'] - df['executionLatency']
                         
-                        if 'newContainer' in df.columns:
+                        if 'containerId' in df.columns:
                             df['newContainer'] = df['containerId'].apply(isNewContainer)
-                        df['failed'] = df['statusCode'] > 400
-                        
+                        df['failed'] = df['statusCode'] > 200
+                        df['success'] = df['statusCode'] == 200
                         if (run is None):
                             run = df
                         else:
@@ -165,6 +171,7 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
 
 
                             df['failed'] = True
+                            df['success'] = False
                             df['statusCode'] = 408
 
 
@@ -185,12 +192,11 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
     #remove faulty entries
     result = result[result['requestId'].apply(lambda x:len(str(x))) == 9]
     #remove unnasseary columns
-    columns_to_keep = ['requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency']
+    columns_to_keep = ['cost','requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','success','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency','newContainer']
     columns_filter = []
     for column in result.columns:
         if column in columns_to_keep:
             columns_filter.append(column)
-    
     #cleaning schema
     result = result[columns_filter]
     result.rename(columns={
@@ -201,7 +207,9 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
         'deliveryLatency':"DLat",
         'responseLatency':"BLat",
         'executionLatency':"ELat", 
-        'failed':"RSuccess", 
+        'success':"RSuccessed", 
+        'failed':"RFailed",
+        'cost':"ECost",
         'label':"Phase",
         'm1':"RStart",
         'm2':"EStart",
@@ -218,6 +226,7 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
         'run':"run", 
         'soruce':"sourceFile",
         'statusCode':"RCode",
-        'vmId':"HId"
+        'vmId':"HId",
+        'newContainer':"CNew"
     }, inplace=True)
     return result
