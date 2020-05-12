@@ -27,12 +27,10 @@ do
             i=$i+1
                 
             echo "url of service: $target_url"
-            mkdir -p results/$experiment_name/$config/$run
-            cd results/$experiment_name/$config/$run/
-            artillery run ../../../../workloadGenerator/benchmarker/test.yml -o "$provider.json" || error_exit "could not benchmark $provider"
-            mv result* "$provider.csv"
-            mv timeout* "$provider-timeout.csv"
-            cd ../../../..
+            mkdir -p results/$experiment_name/$config/$run/$provider
+            cd results/$experiment_name/$config/$run/$provider
+            artillery run ../../../../../workloadGenerator/benchmarker/test.yml -o "$provider.json" || error_exit "could not benchmark $provider"
+            cd ../../../../..
         done
         echo "sleeping for $sleep_between_rounds"
         sleep $sleep_between_rounds

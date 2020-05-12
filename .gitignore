@@ -503,3 +503,6 @@ scripts/credentials.sh
 workloadGenerator/server/.ssh
 workloadGenerator/server/.terraform/
 *.tmp
+
+account.json
+package-lock.json

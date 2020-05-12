@@ -1,4 +1,4 @@
-service: my-service
+service: test-service
 
 provider:
   name: google

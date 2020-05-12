@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "serverless-google-cloudfunctions": "^2.3.3"
+    "serverless-google-cloudfunctions": "^3.0.0"
   }
 }

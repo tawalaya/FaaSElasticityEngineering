@@ -19,16 +19,26 @@ service: tub-elasticity-benchmark # NOTE: update this with your service name
 
 provider:
   name: azure
-  location: UK South
+  region: UK South
+  runtime: nodejs10.x
 
 plugins:
   - serverless-azure-functions
+
+package:
+  exclude:
+    - local.settings.json
+    - .vscode/**
+    - .serverle4ss/**
+    
 functions:
   hello:
     handler: handler.hello
     events:
       - http: true
         x-azure-settings:
+          methods:
+            - GET
           authLevel : anonymous
       - http: true
         x-azure-settings:
