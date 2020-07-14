@@ -18,7 +18,7 @@ def cleanBrokenLines(file,fileds=14,threshold=0.5):
                     d.write(line)
                 else:
                     removed+=1
-        if (removed/lines) > threshold:
+        if lines > 0 and(removed/lines) > threshold:
             print(file,"quality below threshold",removed,lines)
             raise ValueError
     
@@ -122,10 +122,11 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
                             run = df
                         else:
                             run = pd.concat([run, df], sort=True)
-                    except OSError as e:
+                    except Exception as e:
                         print("Failed to read file for",provider,config,run)
                 
-                
+                if run is None:
+                    continue
                 run['m1'] -= startTime
                 run['m2'] -= startTime
                 run['m3'] -= startTime
@@ -192,7 +193,7 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
     #remove faulty entries
     result = result[result['requestId'].apply(lambda x:len(str(x))) == 9]
     #remove unnasseary columns
-    columns_to_keep = ['cost','requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','success','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency','newContainer']
+    columns_to_keep = ['cost','requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','success','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency','newContainer',"pName","vName","region"]
     columns_filter = []
     for column in result.columns:
         if column in columns_to_keep:
@@ -227,6 +228,9 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
         'soruce':"sourceFile",
         'statusCode':"RCode",
         'vmId':"HId",
-        'newContainer':"CNew"
+        'newContainer':"CNew",
+        'pName':"PlatfromName",
+        'region':"Region",
+        'vName':"HIdOld"
     }, inplace=True)
     return result

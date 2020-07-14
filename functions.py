@@ -20,8 +20,10 @@ hmcmp = None
 
 def plotWorkload(ax,data,label="Target Workload",interval=1000):
     data["RStart_1s"] = round(data["RStart"]/interval)
-    lats = data.groupby(["RStart_1s"])['RId'].count().reset_index(name="workload")
-    sns.lineplot(x="RStart_1s", y='workload', data=lats, color="gray",label=label,ax=ax)
+    #lats = data.groupby(["RStart_1s"])['RId'].count().reset_index(name="workload")
+    lats = data.groupby(["RStart_1s"])['RId'].count()
+    #sns.lineplot(x="RStart_1s", y='workload', data=lats, color="gray",label="Target Workload",ax=ax)
+    lats.ewm(span = 4).mean().plot(color="gray", label =label,ax=ax)
     
 def lighten_color(color, amount=0.5):
     """
@@ -174,8 +176,8 @@ def plotHeatmap(ax,all,provider,workload,style,selector="HId",cutoff=0.5,xlim=[0
                     heatmap[HIdIndex[x[selector]],j>>1] +=1
             
         heatmap_cache[cache_key] = (heatmap,firstStart)
-
-    sns.heatmap(heatmap,ax=ax,cmap=cmap,linewidths=0,cbar=False,vmax=vmax)
+    if len(heatmap) > 0:
+        sns.heatmap(heatmap,ax=ax,cmap=cmap,linewidths=0,cbar=False,vmax=vmax)
     if draw_first:
         highlight=[(1,1,1,0),(0,0,1,1)]
         sns.heatmap(firstStart,ax=ax,cmap=highlight,linewidths=0,cbar=False,vmin=0,vmax=1)

@@ -3,7 +3,7 @@ service: test-service
 provider:
   name: google
   runtime: nodejs10
-  project: reserach
+  project: benchimarki
   region: europe-west2
   # the path to the credentials file needs to be absolute
   credentials: ~/.gcloud/keyfile.json

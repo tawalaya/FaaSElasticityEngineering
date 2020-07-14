@@ -1,0 +1,14 @@
+{
+    "extensions": {
+        "http": {
+            "routePrefix": "api",
+            "maxOutstandingRequests": 3000,
+            "maxConcurrentRequests": 400,
+            "dynamicThrottlesEnabled": true,
+            "hsts": {
+                "isEnabled": true,
+                "maxAge": "10"
+            }
+        }
+    }
+}

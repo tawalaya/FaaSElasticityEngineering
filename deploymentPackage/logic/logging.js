@@ -10,19 +10,67 @@ function hashString(str){
 	return hash;
 }
 
-//detect vm id based on either boot time or mac-address+hostname (should be VM unique in azure)
-var vmId = process.platform;
-if (vmId == "win32" || vmId == "win64") {
-    
-    vmId = process.env["COMPUTERNAME"]
-} else  {
-    vmId =  Math.floor((Date.now()/1000)-(fs.readFileSync("/proc/uptime").toString().split(" ")[0].split(".")[0])).toString(32).toUpperCase();
+const containerStartTime = Date.now()
+const containerId = (containerStartTime+Math.floor(Math.random() * 10000000)).toString(32).toUpperCase()
+//Adapted from github.com/wlloyduw/SAAF
+function faas_fingerprint(){
+    var vmId = process.platform;
+    if (vmId == "win32" || vmId == "win64") {
+        
+        vmId = process.env["COMPUTERNAME"]
+    } else  {
+        vmId =  Math.floor((Date.now()/1000)-(fs.readFileSync("/proc/uptime").toString().split(" ")[0].split(".")[0])).toString(32).toUpperCase();
+    }
+    let fingerprint = {};
+    fingerprint["vId"] = vmId;
+    var key = process.env.AWS_LAMBDA_LOG_STREAM_NAME;
+    if (key != null) {
+        fingerprint["platform"] = "AWS";
+        fingerprint["CId"] = key;
+        fingerprint["region"] = process.env.AWS_REGION;
+
+        var vmID = fs.readFileSync("/proc/self/cgroup").toString();
+        var index = vmID.indexOf("sandbox-root");
+        fingerprint["HId"] = vmID.substring(index + 13, index + 19);
+    } else {
+        key = process.env.X_GOOGLE_FUNCTION_NAME;
+        if (key != null) {
+            fingerprint["platform"] = "GCF";
+            fingerprint["CId"] = containerId;
+            fingerprint["region"] = process.env.X_GOOGLE_FUNCTION_REGION;
+            fingerprint["HId"] = vmId;
+        } else {
+            key = process.env.__OW_ACTION_NAME;
+            if (key != null) {
+                fingerprint["platform"] = "ICF";
+                fingerprint["CId"] = containerId;
+                fingerprint["region"] = process.env.__OW_API_HOST;
+                fingerprint["HId"] = fs.readFileSync("/sys/hypervisor/uuid").toString().trim();
+            } else {
+                key = process.env.CONTAINER_NAME;
+                if (key != null) {
+                    fingerprint["platform"] = "ACF";
+                    fingerprint["CId"] = key;
+                    fingerprint["region"] = process.env.Location;
+                    fingerprint["HId"] = vmId;
+                } else {
+                    fingerprint["platform"] = "Unknown";
+                    fingerprint["CId"] = containerId;
+                    fingerprint["HId"] = vmId;
+                    fingerprint["region"] = "Unknown";
+                }
+            }
+        }
+    }
+    return fingerprint;
 }
+
+//detect vm id based on either boot time or mac-address+hostname (should be VM unique in azure)
+const fingerprint = faas_fingerprint();
 
 const osType = process.platform
 const nodeVersion = process.version
-const containerStartTime = Date.now()
-const containerId = (containerStartTime+Math.floor(Math.random() * 10000000)).toString(32).toUpperCase()
+
 
 let startTime;
 module.exports.start = () => {
@@ -34,12 +82,16 @@ module.exports.end = (primeNumber,result) => {
         executionStartTime: startTime,
         executionEndTime,
         executionLatency: executionEndTime - startTime,
-        containerId,
+        containerId:fingerprint["CId"],
         containerStartTime,
-        vmId,
+        vmId:fingerprint["HId"],
         primeNumber,
         result,
         osType,
-        nodeVersion
+        nodeVersion,
+        pName:fingerprint["platfrom"],
+        vName:fingerprint["vId"],
+        region:fingerprint["region"],
+        cName:containerId
     }
 }

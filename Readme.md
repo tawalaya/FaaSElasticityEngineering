@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tawalaya/FaaSElasticityEngineering/master?filepath=SW-Analysis.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tawalaya/FaaSElasticityEngineering/master?filepath=Plots.ipynb)
 # Prerequisits
 - jupyter
 - pandas
