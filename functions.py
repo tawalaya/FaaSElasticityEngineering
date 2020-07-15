@@ -268,7 +268,8 @@ def prepLatData(data,provider,workload,quantile_bar=10):
     X = X[["RLat","ELat","DLat","BLat","EStart","Phase"]]
     X["EStart"] = round(data["EStart"]/1000)
     X = X.groupby("EStart")[["RLat","ELat","DLat","BLat"]].agg([np.median,np.max,np.min,np.mean,q(quantile_bar,"pa"),q(100-quantile_bar,"pb")])
-    
+    new_index = pd.Index(np.arange(0,301,1), name="EStart")
+    X = X.reindex(new_index)
     return X
 
 def plotLineWithErrorBar(ax,data,color="lightblue",label=None,plot_quantile=False):

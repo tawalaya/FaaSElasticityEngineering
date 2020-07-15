@@ -1,15 +1,11 @@
 'use strict';
 
-const logic = require("./multithreadedLogic")
+const logic = require("./logic")
 /* eslint-disable no-param-reassign */
 
-module.exports.hello = function (context) {
-  logic((err, ans) => {
-    context.res = {
-      // status: 200, /* Defaults to 200 */
-      body: JSON.stringify(ans),
-    };
-    context.done();
-  })
-  
-};
+module.exports.hello = async function (context) {
+  const result = logic()
+  return {
+    body: result,
+  };
+}
