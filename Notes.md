@@ -59,3 +59,14 @@
  - increase ulimt on system to 64k
  - atillery is not ideal for this experiment. We should consider a better work load generator.
  - For GCF you need to enable public access to the function unsing the Cloud Console [https://cloud.google.com/run/docs/authenticating/public](https://cloud.google.com/run/docs/authenticating/public)
+
+### Changes
+ - Updated logging.js and added:
+     + pName: platfrom name
+     + vName: old-HId method
+     + cName: old-CId method
+     + Implemented new Runtime fingerprinting using provider specific files and envirmoent variables
+ - Updated Data Loading
+     + added Experiment references so that more than one experiment can be loaded for comparison purposes
+     + added date function
+ - Azure, implemented new recommended function handler method using async.

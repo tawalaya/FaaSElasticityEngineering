@@ -43,6 +43,39 @@ def lighten_color(color, amount=0.5):
     c = map(lambda x:hex(x)[2:],c)
     return "#{}{}{}".format(*c)
 
+def plotStyle(style,hmcmp):
+    colors = []
+    legendNames = []
+    for x in ["RLat","ELat","DLat"]:
+        c = style["Lats"][x]
+        colors.append(c)
+        legendNames.append(x)
+
+    for x in ["New","Reused"]:
+        c = style["CNew"][x]
+        colors.append(c)
+        legendNames.append(x)
+
+    for x in ["p0","p1","p2"]:
+        c = style["Phases"][x]
+        colors.append(c)
+        legendNames.append(x)
+
+    for x in ["aws","ibm","gcf","azure"]:
+        c = style[x]["color"]
+        colors.append(c)
+        legendNames.append(x)
+
+    sns.palplot(hmcmp)
+    sns.palplot(colors)
+    fig, ax = plt.subplots(facecolor='white',figsize=(12,1),frameon=False)
+    ax.axis([0, 10, 0, 1])
+    ax.axis('off')
+    # transform=ax.transData is the default, but we'll specify it anyway
+    for x in range(0,len(legendNames)):
+        name = legendNames[x]
+        ax.text(0.125+x*0.85, 1, name, transform=ax.transData,rotation=45)
+
 def plotLatColdWarm(ax,all,provider,workload,style,lat="DLat",title=None):
     if title is None:
         ax.set_title("{} {}".format(style[provider]["name"],style["Names"][lat]))

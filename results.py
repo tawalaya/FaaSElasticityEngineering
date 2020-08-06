@@ -192,8 +192,9 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
     
     #remove faulty entries
     result = result[result['requestId'].apply(lambda x:len(str(x))) == 9]
+    result["name"] = experiment_name
     #remove unnasseary columns
-    columns_to_keep = ['cost','requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','success','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency','newContainer',"pName","vName","region"]
+    columns_to_keep = ['cost','requestId','config','containerId','containerStartTime','deliveryLatency','responseLatency','executionLatency','failed','success','label','m1','m2','m3','m4','newContainer','nodeVersion','nonExecutionLatency','osType','primeNumber','provider','result','run','soruce','statusCode','vmId','requestResponseLatency','newContainer',"pName","vName","region","raw","extras","cName","name"]
     columns_filter = []
     for column in result.columns:
         if column in columns_to_keep:
@@ -231,6 +232,10 @@ def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True)
         'newContainer':"CNew",
         'pName':"PlatfromName",
         'region':"Region",
-        'vName':"HIdOld"
+        'vName':"HIdOld",
+        "cName":"CIdOld",
+        'raw':'FEnv',
+        'extras':'FOpt',
+        'name':'Experiment'
     }, inplace=True)
     return result

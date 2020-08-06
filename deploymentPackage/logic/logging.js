@@ -32,6 +32,8 @@ function faas_fingerprint(){
         var vmID = fs.readFileSync("/proc/self/cgroup").toString();
         var index = vmID.indexOf("sandbox-root");
         fingerprint["HId"] = vmID.substring(index + 13, index + 19);
+        fingerprint["RAW"] = vmID;
+        fingerprint["extras"] = fs.readFileSync("/proc/uptime").toString();
     } else {
         key = process.env.X_GOOGLE_FUNCTION_NAME;
         if (key != null) {
@@ -39,6 +41,9 @@ function faas_fingerprint(){
             fingerprint["CId"] = containerId;
             fingerprint["region"] = process.env.X_GOOGLE_FUNCTION_REGION;
             fingerprint["HId"] = vmId;
+            fingerprint["extras"] = process.env.SUPERVISOR_HOSTNAME;
+            fingerprint["RAW"] = fs.readFileSync("/proc/uptime").toString();
+
         } else {
             key = process.env.__OW_ACTION_NAME;
             if (key != null) {
@@ -46,18 +51,24 @@ function faas_fingerprint(){
                 fingerprint["CId"] = containerId;
                 fingerprint["region"] = process.env.__OW_API_HOST;
                 fingerprint["HId"] = fs.readFileSync("/sys/hypervisor/uuid").toString().trim();
+                fingerprint["RAW"] = fingerprint["HId"];
+                fingerprint["extras"] = "Unknown";
             } else {
-                key = process.env.CONTAINER_NAME;
+                key = process.env.WEBSITE_HOSTNAME;
                 if (key != null) {
                     fingerprint["platform"] = "ACF";
                     fingerprint["CId"] = key;
-                    fingerprint["region"] = process.env.Location;
-                    fingerprint["HId"] = vmId;
+                    fingerprint["region"] = process.env.REGION_NAME;
+                    fingerprint["HId"] = process.env.COMPUTERNAME;
+                    fingerprint["RAW"] = process.env.WEBSITE_INSTANCE_ID;
+                    fingerprint["extras"] = process.env.MACHINEKEY_DecryptionKey;
                 } else {
                     fingerprint["platform"] = "Unknown";
                     fingerprint["CId"] = containerId;
                     fingerprint["HId"] = vmId;
                     fingerprint["region"] = "Unknown";
+                    fingerprint["RAW"] = "Unknown";
+                    fingerprint["extras"] = "Unknown";
                 }
             }
         }
@@ -89,9 +100,11 @@ module.exports.end = (primeNumber,result) => {
         result,
         osType,
         nodeVersion,
-        pName:fingerprint["platfrom"],
+        pName:fingerprint["platform"],
         vName:fingerprint["vId"],
         region:fingerprint["region"],
-        cName:containerId
+        cName:containerId,
+        raw:fingerprint["RAW"],
+        extras:fingerprint["extras"],
     }
 }
