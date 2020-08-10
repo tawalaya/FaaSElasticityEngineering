@@ -25,10 +25,10 @@ def cleanBrokenLines(file,fileds=14,threshold=0.5):
     return file+".tmp"
         
 costs = {
-    "aws":  {"EVar":16.67,"EFix":0.2},
-    "gcf":  {"EVar":16.50,"EFix":0.4},
-    "ibm":{"EVar":17.0,"EFix":0.0},
-    "azure":  {"EVar":16.0,"EFix":0.2}
+    "aws":    {"EVar":16.67,"EFix":0.2},
+    "gcf":    {"EVar":16.50,"EFix":0.4},
+    "ibm":    {"EVar":17.00,"EFix":0.0},
+    "azure":  {"EVar":16.00,"EFix":0.2}
 }
 def load(experiment_name,providers,configs,num_repetitions=1,read_timeouts=True):
     knownIds = {}

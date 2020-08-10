@@ -335,7 +335,7 @@ def plotLatOverTime(ax,all,provider,workload,style,lat="DLat",title=None,label=N
 
 def plotClientSideOverview(ax,data,provider,workload,style,title=False,legend=True,
                            ylim=[0,30],xlim=None,quantile_bar=10,plot_quantile=False,
-                          with_thruput=False):
+                          with_thruput=False,xspacing=20):
     lats = prepLatData(data,provider,workload,quantile_bar)[["ELat","RLat"]]
     ax2 = ax.twinx()
     plotLineWithErrorBar(ax2,lats["ELat"],style["Lats"]["ELat"],style["Names"]["ELat"])
@@ -360,14 +360,15 @@ def plotClientSideOverview(ax,data,provider,workload,style,title=False,legend=Tr
     #highlight phases
     ax.axvline(60,alpha=0.7,color="black")
     ax.axvline(120,alpha=0.7,color="black")
-    for i in range(0,xlim[1],20):
+    
+    for i in range(0,xlim[1],xspacing):
         ax.axvline(i,alpha=0.1,color="black")
 
     ax.grid(False)
     ax.set_xticks(ticks=[30,90,210])
-    ax.set_xticks(ticks=range(0,xlim[1]+1,20),minor=True)
+    ax.set_xticks(ticks=range(0,xlim[1]+1,xspacing),minor=True)
     ax.set_xticklabels(map(lambda x:style["Names"][x],["p0","p1","p2"]),minor=False)
-    ax.set_xticklabels(range(0,xlim[1]+1,20),minor=True)
+    ax.set_xticklabels(range(0,xlim[1]+1,xspacing),minor=True)
     ax.tick_params(axis='both', which='major', pad=15)
     if legend:
         lines, labels = ax.get_legend_handles_labels()
